@@ -22,7 +22,8 @@ GKE:
         kubectl apply -f kubernetes/istio/gateway.yaml
 
     create virtual service and deployment strategy:
-        kubectl apply -f kubernetes/istio/canary/canary.yaml OR kubernetes/istio/shadow/shadow.yaml
+        kubectl apply -f kubernetes/istio/canary/canary.yaml
+         OR kubernetes/istio/shadow/shadow.yaml
 
     create destination rules:
         kubectl apply -f kubernetes/istio/destination-rule.yaml
@@ -31,10 +32,52 @@ GKE:
     Test:
         while true; do curl http://$EXTERNAL_IP --silent -w "Time: %{time_total}s \t Status: %{http_code}\n" -o /dev/null; sleep .1; done
 
+Minikube:
 
+    create cluster:
+
+        minikube start --memory=4096 --cpus=4
+    
+        install istio (1.4.2):
+            istioctl manifest apply --set profile=demo
+    
+        check istio pods:
+            kubectl get pods -n istio-system
+
+        enable sidecard:
+            kubectl label namespace default istio-injection=enabled
+
+        create app:
+        kubectl apply -f kubernetes/api.yaml
+
+    create gateway:
+        kubectl apply -f kubernetes/istio/gateway.yaml
+
+    create virtual service and deployment strategy:
+        kubectl apply -f kubernetes/istio/canary/canary.yaml
+         OR kubernetes/istio/shadow/shadow.yaml
+
+    create destination rules:
+        kubectl apply -f kubernetes/istio/destination-rule.yaml
+
+    get ip:
+        minikube ip && kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}'
+
+    kali and grafana:
+        kubectl port-forward $(kubectl get pod -n istio-system -l app=kiali -o jsonpath='{.items[0].metadata.name}') -n istio-system 20001
+        kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000
+
+    
+    Test:
+        while true; do curl http://$EXTERNAL_IP --silent -w "Time: %{time_total}s \t Status: %{http_code}\n" -o /dev/null; sleep .1; done
+
+        
 
 references:
     https://cloud.google.com/istio/docs/istio-on-gke/installing#command-line
     https://rinormaloku.com/getting-started-istio/
     https://github.com/rinormaloku/istio-mastery
     https://medium.com/google-cloud/kubernetes-canary-deployments-for-mere-mortals-13728ce032fe
+    https://kubernetes.io/docs/tasks/tools/install-minikube/
+    https://istio.io/pt-br/docs/setup/platform-setup/minikube/
+    https://medium.com/@airwavetechio/istio-with-minikube-on-windows-pt-1-e33e5f193b2
