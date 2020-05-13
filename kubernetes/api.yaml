@@ -37,8 +37,13 @@ spec:
         version: v1
     spec:
       containers:
-        - image: gcr.io/wave-235114/app:1.0
-          imagePullPolicy: Always
+        # GKE
+        #- image: gcr.io/wave-235114/app:1.0
+        #  imagePullPolicy: Always
+        
+        # Image local
+        - image: myapp:1.0
+          imagePullPolicy: Never
           name: my-app
           ports:
             - containerPort: 8080
@@ -70,8 +75,13 @@ spec:
         version: v2
     spec:
       containers:
-        - image: gcr.io/wave-235114/app:4.0
-          imagePullPolicy: Always
+        # GKE
+        #- image: gcr.io/wave-235114/app:4.0
+        #  imagePullPolicy: Always
+        
+        # Image local
+        - image: myapp:2.0
+          imagePullPolicy: Never
           name: my-app
           ports:
             - containerPort: 8080
