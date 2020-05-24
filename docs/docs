@@ -1,37 +1,3 @@
-GKE:
-    create cluster:
-        export PROJECT_ID=
-        gcloud config set project $PROJECT_ID
-        gcloud config set compute/zone us-east1-d
-
-
-        gcloud container clusters create kubetech --cluster-version latest --machine-type=n1-standard-2 --num-nodes 4
-        gcloud beta container clusters update kubetech --update-addons=Istio=ENABLED --istio-config=auth=MTLS_PERMISSIVE
-
-        kubectl label namespace default istio-injection=enabled
-
-        gcloud auth login
-
-        kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user="$(gcloud config get-value core/account)"
-
-
-    create app:
-        kubectl apply -f kubernetes/api.yaml
-
-    create gateway:
-        kubectl apply -f kubernetes/istio/gateway.yaml
-
-    create virtual service and deployment strategy:
-        kubectl apply -f kubernetes/istio/canary/canary.yaml
-         OR kubernetes/istio/shadow/shadow.yaml
-
-    create destination rules:
-        kubectl apply -f kubernetes/istio/destination-rule.yaml
-
-
-    Test:
-        while true; do curl http://$EXTERNAL_IP --silent -w "Time: %{time_total}s \t Status: %{http_code}\n" -o /dev/null; sleep .1; done
-
 Minikube:
 
     create cluster:
@@ -69,7 +35,7 @@ Minikube:
 
     
     Test:
-        while true; do curl http://$EXTERNAL_IP --silent -w "Time: %{time_total}s \t Status: %{http_code}\n" -o /dev/null; sleep .1; done
+        while true; do curl http://172.18.111.92:31731 --silent -w "Time: %{time_total}s \t Status: %{http_code}\n" -o /dev/null; sleep .1; done
 
         
 

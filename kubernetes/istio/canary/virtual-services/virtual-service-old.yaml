@@ -14,8 +14,4 @@ spec:
          subset: v1
          port:
           number: 80
-      mirror:
-        host: my-app
-        subset: v2
-        port:
-          number: 80
+        weight: 100

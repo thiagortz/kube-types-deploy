@@ -11,14 +11,7 @@ spec:
     - route:
       - destination:
          host: my-app
-         subset: v1
+         subset: v1-1
          port:
           number: 80
-        weight: 80
-
-      - destination:
-         host: my-app
-         subset: v2
-         port:
-           number: 80
-        weight: 20
+        weight: 100

@@ -37,11 +37,6 @@ spec:
         version: v1
     spec:
       containers:
-        # GKE
-        #- image: gcr.io/wave-235114/app:1.0
-        #  imagePullPolicy: Always
-        
-        # Image local
         - image: myapp:1.0
           imagePullPolicy: Never
           name: my-app
@@ -49,13 +44,12 @@ spec:
             - containerPort: 8080
 
 ---
-  
-# API BUG
 
+# API RELEASE
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app-v2
+  name: my-app-v1-1
   labels:
     app: my-app
 spec:
@@ -72,15 +66,10 @@ spec:
     metadata:
       labels:
         app: my-app
-        version: v2
+        version: v1-1
     spec:
       containers:
-        # GKE
-        #- image: gcr.io/wave-235114/app:4.0
-        #  imagePullPolicy: Always
-        
-        # Image local
-        - image: myapp:2.0
+        - image: myapp:1.1
           imagePullPolicy: Never
           name: my-app
           ports:
