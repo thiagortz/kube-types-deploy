@@ -14,38 +14,38 @@ spec:
 
 ---
 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: my-app-v1
-  labels:
-    app: my-app
-spec:
-  selector:
-    matchLabels:
-      app:  my-app
-  replicas: 1
-  strategy:
-    type: RollingUpdate
-    rollingUpdate: 
-      maxUnavailable: 1
-      maxSurge: 1 
-  template:
-    metadata:
-      labels:
-        app: my-app
-        version: v1
-    spec:
-      containers:
-        - image: myapp:1.0
-          imagePullPolicy: Never
-          name: my-app
-          ports:
-            - containerPort: 8080
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: my-app-v1
+#   labels:
+#     app: my-app
+# spec:
+#   selector:
+#     matchLabels:
+#       app:  my-app
+#   replicas: 2
+#   strategy:
+#     type: RollingUpdate
+#     rollingUpdate: 
+#       maxUnavailable: 1
+#       maxSurge: 1 
+#   template:
+#     metadata:
+#       labels:
+#         app: my-app
+#         version: v1
+#     spec:
+#       containers:
+#         - image: myapp:1.0
+#           imagePullPolicy: Never
+#           name: my-app
+#           ports:
+#             - containerPort: 8080
 
 ---
 
-# API RELEASE
+#API RELEASE
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -56,7 +56,7 @@ spec:
   selector:
     matchLabels:
       app:  my-app
-  replicas: 1
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate: 

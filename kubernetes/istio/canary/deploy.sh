@@ -4,10 +4,12 @@ end=$((SECONDS+30))
 
 apply_canary(){
     kubectl apply -f ./kubernetes/istio/canary/gateway.yaml
-    kubectl apply -f ./kubernetes/api/api.yaml
-    kubectl apply -f ./kubernetes/istio/canary/virtual-services/virtual-service-release.yaml
+    kubectl apply -f ./kubernetes/api
+    sleep 10
     kubectl apply -f ./kubernetes/istio/canary/destination-rules/destination-rule-release.yaml
-    sleep 5
+    sleep 10
+    kubectl apply -f ./kubernetes/istio/canary/virtual-services/virtual-service-release.yaml
+
 }
 
 health_check(){
@@ -29,10 +31,10 @@ promote_release(){
     if [ "$1" = true ] ; then
         echo "  Promoting new version of the api"
 
-        kubectl apply -f ./kubernetes/istio/canary/virtual-services/virtual-service-new.yaml
         kubectl apply -f ./kubernetes/istio/canary/destination-rules/destination-rule-new.yaml
+        kubectl apply -f ./kubernetes/istio/canary/virtual-services/virtual-service-new.yaml
 
-        sleep 5
+        sleep 20
         kubectl delete deployment my-app-v1
     else
         roll_back
@@ -42,10 +44,10 @@ promote_release(){
 
 roll_back(){
     echo "  Rollback to stable version"
-    kubectl apply -f ./kubernetes/istio/canary/virtual-services/virtual-service-old.yaml
-    kubectl apply -f ./kubernetes/istio/canary/destination-rules/destination-rule-old.yaml
-
-    sleep 5
+    kubectl apply -f ./kubernetes/istio/canary/destination-rules/destination-rule-rollback.yaml
+    kubectl apply -f ./kubernetes/istio/canary/virtual-services/virtual-service-rollback.yaml
+    sleep 20
+    
     kubectl delete deployment my-app-v1-1
 }
 
