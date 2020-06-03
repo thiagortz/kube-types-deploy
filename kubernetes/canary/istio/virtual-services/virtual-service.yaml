@@ -11,7 +11,7 @@ spec:
     - route:
       - destination:
          host: my-app
-         subset: v1
+         subset: production
          port:
           number: 80
         weight: 100
