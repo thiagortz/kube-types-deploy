@@ -1,0 +1,12 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-native
+spec:
+  rules:
+  - host: canary-native.com
+    http:
+      paths:
+      - backend:
+          serviceName: my-app
+          servicePort: 8080
